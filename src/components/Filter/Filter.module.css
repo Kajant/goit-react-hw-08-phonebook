@@ -1,0 +1,13 @@
+.filter {
+    text-align: center;
+}
+.info {
+    color: rgb(187, 187, 255);
+}
+.input {
+    border-radius: 4px;
+    border: 1px solid rgb(181, 181, 181);
+    padding-left: 6px;
+    color: rgb(181, 181, 181);
+    margin-bottom: 22px;
+}

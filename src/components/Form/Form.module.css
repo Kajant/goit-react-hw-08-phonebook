@@ -1,0 +1,32 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+
+}
+.label {
+  display: flex;
+  flex-direction: column;
+  color: rgb(181, 181, 181);
+  font-weight: 150;
+  text-align: left;
+  margin: auto;
+  
+
+}
+.input {
+    border-radius: 4px;
+    border: 1px solid rgb(181, 181, 181);
+    margin-bottom: 6px;
+    padding-left: 6px;
+    color: rgb(181, 181, 181);
+}
+
+.btn {
+  margin: 16px auto;
+    border-radius: 4px;
+    background-color: white;
+    color: rgb(174, 197, 174);
+    border: 1px solid rgb(174, 197, 174);
+    padding: 0px 10px;
+}
