@@ -1,84 +1,88 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContacts } from '../../redux/contactsSlice';
+import { addContact } from '../../redux/contactsSlice';
+import Notiflix from 'notiflix';
 import css from './Form.module.css';
-import PropTypes from 'prop-types';
+import { IconContext } from 'react-icons';
+import { ImPlus } from "react-icons/im";
 
-function Form() {
+  const Form = () => {
   const [name, setName] = useState('');
-  const [phone, setNumber] = useState('');
+  const [number, setNumber] = useState('');
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contacts.contacts.items);
+
 
   const onInputChange = event => {
     switch (event.target.name) {
       case 'name':
         setName(event.target.value);
         break;
-      case 'phone':
+      case 'number':
         setNumber(event.target.value);
         break;
       default:
-        console.log("There isn't such case");
+        Notiflix.Notify.warning('Error');
     }
   };
 
-  const reset = () => {
-    setName('');
-    setNumber('');
-  };
-
-  const onFormSubmit = event => {
-    event.preventDefault();
-    const newContact = {
-      name,
-      phone,
+    const reset = () => {
+      setName('');
+      setNumber('');
     };
-    const newName = contacts.find(
-      el => el.name.toLowerCase() === name.toLowerCase()
-    );
 
-    if (newName) {
-      alert(`${name} is already is in contacts.`);
-      return;
-    }
-    dispatch(addContacts(newContact));
-    reset();
-  };
+    const onForm = event => {
+      event.preventDefault();
+      const newContact = {
+        name,
+        number,
+      };
+      const newName = contacts.find(
+        el => el.name.toLowerCase() === name.toLowerCase()
+      );
+  
+      if (newName) {
+        Notiflix.Notify.info(`${name} is already is in contacts.`);
+        return;
+      }
+      dispatch(addContact(newContact));
+      reset();
+    };
 
   return (
-    <form
-      className={css.form}
-      onSubmit={onFormSubmit}>
+    <form 
+    className={css.form} 
+    onSubmit={onForm}>
       <label className={css.label}>Name
         <input
           className={css.input}
+          type="text"
           value={name}
           onChange={onInputChange}
-          type="text"
           name="name"
           placeholder="name"
-          required />
+          required
+        />
       </label>
       <label className={css.label}>Number
         <input
           className={css.input}
-          value={phone}
-          onChange={onInputChange}
           type="tel"
-          name="phone"
+          value={number}
+          onChange={onInputChange}
+          name="number"
           placeholder="123-45-67"
           pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-          required />
+          required
+        />
       </label>
       <button className={css.btn} type="submit">
-        Add contact
+          <IconContext.Provider value={{ size: 12 }}>
+            <ImPlus/>
+          </IconContext.Provider>
       </button>
     </form>
   );
-}
-Form.propTypes = {
-  onAddContact: PropTypes.func.isRequired,
 };
 
 export default Form;

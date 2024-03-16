@@ -1,45 +1,78 @@
-import Form  from './Form/Form';
-import Contacts from './Contacts/Contacts';
-import Filter from './Filter/Filter';
-import { Oval } from 'react-loader-spinner';
-import { selectIsLoading } from '../redux/Selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { getContacts } from '../redux/contactsSlice';
-import css from './App.module.css';
+import { Suspense, lazy, useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import Navigation from './Navigation/Navigation';
+import UserMenu from './Menu/Menu';
+import RestrictedRoute from './RestrictedRoute/RestrictedRoute';
+import PrivateRoute from './PrivateRoute/PrivateRoute';
+import Loader from './Loader/Loader';
+import Notiflix from 'notiflix'
+import {
+  selectAuthError,
+  selectAuthIsAuth,
+  selectAuthIsLoading,
+} from '../redux/authSelectors';
+import { refreshThunk } from '../redux/authReducers';
+import { selectError } from '../redux/contactSelectors';
+
+const RegisterPage = lazy(() => import('pages/RegisterPage'));
+const HomePage = lazy(() => import('pages/HomePage'));
+const LoginPage = lazy(() => import('pages/LoginPage'));
+const ContactsPage = lazy(() => import('pages/ContactsPage'));
+
+const appRoutes = [
+  { path: '/', element: <HomePage /> },
+  {
+    path: '/register',
+    element: (
+      <RestrictedRoute>
+        <RegisterPage />
+      </RestrictedRoute>
+    ),
+  },
+  {
+    path: '/login',
+    element: (
+      <RestrictedRoute>
+        <LoginPage />
+      </RestrictedRoute>
+    ),
+  },
+  {
+    path: '/contacts',
+    element: (
+      <PrivateRoute>
+        <ContactsPage />
+      </PrivateRoute>
+    ),
+  },
+];
 
 export const App = () => {
-  const isLoading = useSelector(selectIsLoading);
   const dispatch = useDispatch();
+
+  const isAuth = useSelector(selectAuthIsAuth);
+  const isLoading = useSelector(selectAuthIsLoading);
+  const errorAuth = useSelector(selectAuthError);
+  const errorFetch = useSelector(selectError);
+
   useEffect(() => {
-    dispatch(getContacts());
+    dispatch(refreshThunk());
   }, [dispatch]);
 
-      return (
-        <div>
-          <div className={css.wrapper}>
-            <h1 className={css.title}>Phonebook</h1>
-            <Form />
-          </div>
-          <div className={css.wrapper}>
-            <h2 className={css.title}>Contacts</h2>
-            <Filter/>
-            {isLoading === true && (
-              (<div className={css.loader}>
-              <Oval
-                visible={true}
-                height="80"
-                width="80"
-                color="#4fa94d"
-                ariaLabel="oval-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-                />
-                </div>)
-            )}
-            <Contacts/>
-          </div>
-        </div>
-      );
-    }
-export default App;
+  return (
+    <>
+    <Navigation />
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          {appRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
+        </Routes>
+      </Suspense>
+      {isAuth === true && <UserMenu />}
+      {isLoading === true && <Loader />}
+      {errorAuth || (errorFetch && Notiflix.Notify.warning('Error'))}
+  </>
+);
+};

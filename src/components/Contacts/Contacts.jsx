@@ -1,31 +1,40 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteContacts } from '../../redux/contactsSlice';
-import { selectVisibleContacts } from '../../redux/Selectors';
-import css from './Contacts.module.css';
-import PropTypes from 'prop-types';
+import { selectVisibleContacts } from '../../redux/contactSelectors';
+import { IconContext } from 'react-icons';
+import { ImPhone, ImCross } from "react-icons/im";
+import css from "./Contacts.module.css";
 
-const Contacts = () => {
+const List = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectVisibleContacts);
+  const selectedContacts = useSelector(selectVisibleContacts);
+
   const onDelete = contactId => {
     dispatch(deleteContacts(contactId));
   };
-  return (
-    <>
-      <ul className={css.contactList}>
-        {contacts.map(({ id, name, phone }) => (
-          <li className={css.item} key={id}>
-            <span>
-                    {name}: {phone}                    
-            </span>
-            <button className={css.btn} onClick={() => onDelete(id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </>)
-}
-Contacts.propTypes = {
-  contacts: PropTypes.array.isRequired,
-};
 
-export default Contacts;
+  return (
+    <ul className={css.contactList}>
+    {selectedContacts.map(({ id, name, number }) => (
+      <li className={css.item} key={id}>
+        <div className={css.contact}>
+        <a className={css.icon} href={`tel:${number}`}>
+          <IconContext.Provider value={{ size: 12 }}>
+            <ImPhone />
+          </IconContext.Provider>
+        </a>
+        <div className={css.contactNumber}>
+                {name}: {number}                    
+        </div>
+        </div>
+        <button className={css.btn} onClick={() => onDelete(id)}>
+         <IconContext.Provider value={{ size: 12 }}>
+            <ImCross />
+          </IconContext.Provider>
+        </button>
+      </li>
+    ))}
+  </ul>
+  );
+};
+export default List;

@@ -1,0 +1,29 @@
+
+  .wrapper {
+  
+      width: 320px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 6px auto;
+  }
+  .navLink {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 66px;
+    height: 66px;
+    border: none;
+    border-radius: 50%;
+    transition: all 250ms ease-in;
+    cursor: pointer;
+    color: var(--white);
+    background-color: var(--blue);
+  }
+  
+  .navLink:is(:hover, :focus),
+  .navLink.active {
+    background-color: var(--blueActive);
+    box-shadow: 1px 1px 4px 0px rgba(66, 68, 90, 1);
+  }
+  

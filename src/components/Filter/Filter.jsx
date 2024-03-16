@@ -1,28 +1,37 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from '../../redux/contactsSlice';
-import { selectFilter } from '../../redux/Selectors';
+import { selectFilter } from '../../redux/contactSelectors';
+import { IconContext } from 'react-icons';
+import { ImFilter } from "react-icons/im";
 import css from './Filter.module.css';
-import PropTypes from 'prop-types';
 
 const Filter = () => {
-    const dispatch = useDispatch();
-  
-    const filter = useSelector(selectFilter);
-  
-    const onFilterChange = e => {
-      dispatch(setFilter(e.target.value));
-    };
-    return (
-        <div className={css.filter}>
-            <p className={css.info}>Find contacts by name</p>
-            <input className={css.input} type="text" name="filter" placeholder="name" value={filter} onChange={onFilterChange} />
-        </div>
-    )
-}
-Filter.propTypes = {
-    filter: PropTypes.string.isRequired,
-    filterInput: PropTypes.func,
-};
+  const dispatch = useDispatch();
+  const search = useSelector(selectFilter);
+  const onInput = e => {
+    dispatch(setFilter(e.target.value));
+  };
 
-export default Filter;
+  return (
+    <>
+    <div className={css.filter}>
+      <p className={css.info}>Search contacts</p>
+      <input
+        className={css.input}
+        type="text"
+        value={search}
+        name="search"
+        placeholder="Search"
+        onChange={onInput}
+      />
+      <div className={css.icon}>
+      <IconContext.Provider value={{ size: 12 }}>
+        <ImFilter/>
+      </IconContext.Provider>
+      </div>
+    </div>
+    </>
+  );}
+
+  export default Filter;

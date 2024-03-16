@@ -1,0 +1,22 @@
+.title {
+    font-size: 44px;
+    font-weight: 150;
+    margin: 0;
+    
+  }
+.header {
+    margin-top: 22px;
+    margin-bottom: 0px;
+    display: flex;
+    color: var(--grey);
+    justify-content: left;
+    align-items: center;
+    gap: 12px;
+}
+.wrapper {
+    background-color: var(--whiteBg);
+    margin: auto;
+    width: 340px;
+    padding: 10px;
+    border-radius: 3px;
+  }

@@ -1,0 +1,11 @@
+.homepage {
+  color: var(--white);
+  margin: 44px auto;
+  border-radius: 50%;
+  background-color: var(--blue);
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
